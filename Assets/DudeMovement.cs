@@ -2,193 +2,72 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR;
 
 public class DudeMovement : MonoBehaviour
 {
-    [Header("Parts Reference")]
-    [SerializeField] private GameObject dudeTorso;
-    [SerializeField] private GameObject dudeArmL;
-    [SerializeField] private GameObject dudeArmR;
+    [SerializeField] private GameObject topHook;
+    [SerializeField] private LineRenderer lr;
+    [SerializeField] private SpringJoint2D joint;
 
-    [Header("MouseUpdates")]
-    [SerializeField] private float armsRiseValue;
-    [SerializeField] private float torsoRiseValue;
+    private Rigidbody2D rb;
+    [SerializeField] private float moveSpeed;
 
-    private bool rightMouseHeld;
-    private bool rightArmUp;
+    [SerializeField] private Wind wind;
 
-    private bool leftMouseHeld;
-    private bool leftArmUp;
-
-    private bool bothArmsHeld;
-    private bool isClimbing;
-    private bool firstStep;
+    [SerializeField] private GameObject topHinge;
 
     private void Start()
     {
-        rightMouseHeld = false;
-        leftMouseHeld = false;
+        lr.enabled = true;
 
-        firstStep = true;
-        isClimbing = false;
+        joint.anchor = topHinge.transform.position;
+
+        joint.connectedAnchor = topHinge.transform.position;
+
+
+
+        joint.enabled = false;
+        rb = GetComponent<Rigidbody2D>();
+        rb.gravityScale = 0f;
     }
 
     private void Update()
     {
-        if (firstStep)
+        lr.SetPosition(0, transform.position);
+        lr.SetPosition(1, topHook.transform.position);
+
+        joint.anchor = new Vector2(topHinge.transform.position.x, topHinge.transform.position.y - transform.position.y);
+
+        if (Input.GetKey(KeyCode.Mouse0))
         {
-            if (Input.GetKey(KeyCode.Mouse1))
-            {
-                rightMouseHeld = true;
-            }
-            if (Input.GetKeyUp(KeyCode.Mouse1))
-            {
-                rightMouseHeld = false;
-            }
-
-            if (Input.GetKey(KeyCode.Mouse0))
-            {
-                leftMouseHeld = true;
-            }
-            if (Input.GetKeyUp(KeyCode.Mouse0))
-            {
-                leftMouseHeld = false;
-            }
-
-            #region RaisingArms
-
-            if (rightMouseHeld)
-            {
-                if (!rightArmUp)
-                {
-                    RightArmUp();
-                }
-            }
-            else if (!rightMouseHeld)
-            {
-                if (rightArmUp)
-                {
-                    RightArmDown();
-                }
-            }
-            else if (leftMouseHeld)
-            {
-                if (!leftArmUp)
-                {
-                    LeftArmUp();
-                }
-            }
-            else if (!leftMouseHeld)
-            {
-                if (leftArmUp)
-                {
-                    LeftArmDown();
-                }
-            }
-
-            #endregion
-
-            //Debug.Log(leftMouseHeld + ", " + rightMouseHeld);
-
-            if (!isClimbing)
-            {
-                if (rightMouseHeld)
-                {
-                    if (leftMouseHeld)
-                    {
-                        isClimbing = true;
-                        RightMouseClimbFirst();
-                    }
-                }
-                else if (leftMouseHeld)
-                {
-                    if (rightMouseHeld)
-                    {
-                        isClimbing = true;
-                        LeftMouseClimbFirst();
-                    }
-                }
-            }
-
-            if (leftMouseHeld && rightMouseHeld && isClimbing)
-            {
-                if (!rightMouseHeld)
-                {
-                    isClimbing = false;
-                }
-                else if (!leftMouseHeld)
-                {
-                    isClimbing = false;
-                }
-            }
-
+            joint.enabled = false;
+            rb.gravityScale = 0f;
+            rb.velocity = new Vector2(rb.velocity.x, moveSpeed);
+            wind.NoWind();
         }
 
-        if (!firstStep)
+        if (Input.GetKeyUp(KeyCode.Mouse0))
         {
-            if (Input.GetKey(KeyCode.Mouse1))
-            {
-                rightMouseHeld = true;
-            }
-            if (Input.GetKeyUp(KeyCode.Mouse1))
-            {
-                rightMouseHeld = false;
-            }
-
-            if (Input.GetKey(KeyCode.Mouse0))
-            {
-                leftMouseHeld = true;
-            }
-            if (Input.GetKeyUp(KeyCode.Mouse0))
-            {
-                leftMouseHeld = false;
-            }
-
-            #region RaisingArms
-
-            if (rightMouseHeld)
-            {
-                if (!rightArmUp)
-                {
-                    dudeArmR.transform.position =
-                        new Vector2(dudeArmR.transform.position.x, dudeArmR.transform.position.y + armsRiseValue);
-                    rightArmUp = true;
-                }
-            }
-            if (!rightMouseHeld)
-            {
-                if (rightArmUp)
-                {
-                    dudeArmR.transform.position =
-                        new Vector2(dudeArmR.transform.position.x, dudeArmR.transform.position.y);
-                    rightArmUp = false;
-                }
-
-            }
-
-            if (leftMouseHeld)
-            {
-                if (!leftArmUp)
-                {
-                    dudeArmL.transform.position =
-                        new Vector2(dudeArmL.transform.position.x, dudeArmL.transform.position.y + armsRiseValue);
-                    leftArmUp = true;
-                }
-            }
-            if (!leftMouseHeld)
-            {
-                if (leftArmUp)
-                {
-                    dudeArmL.transform.position =
-                        new Vector2(dudeArmL.transform.position.x, dudeArmL.transform.position.y);
-                    leftArmUp = false;
-                }
-            }
-
-            #endregion
+            joint.enabled = false;
+            rb.gravityScale = 0;
+            rb.velocity = Vector2.zero;
+            wind.NoWind(); ;
         }
 
+        if (Input.GetKey(KeyCode.Mouse1))
+        {
+            joint.enabled = true;
+            wind.ApplyWind();
+        }
 
+        if (Input.GetKeyUp(KeyCode.Mouse1))
+        {
+            joint.enabled = false;
+            rb.gravityScale = 0;
+            rb.velocity = Vector2.zero;
+            wind.NoWind();
+        }
 
 
 
@@ -196,75 +75,5 @@ public class DudeMovement : MonoBehaviour
         {
             SceneManager.LoadScene(0);
         }
-    }
-
-    private void LeftMouseClimbFirst()
-    {
-        dudeTorso.transform.position =
-                            new Vector2(dudeTorso.transform.position.x, dudeTorso.transform.position.y + torsoRiseValue);
-
-        dudeArmR.transform.position =
-           new Vector2(dudeArmR.transform.position.x, dudeArmR.transform.position.y);
-
-        dudeArmL.transform.position =
-            new Vector2(dudeArmL.transform.position.x, dudeArmL.transform.position.y);
-
-
-        //rightArmUp = true;
-        //rightMouseHeld = false;
-        //leftMouseHeld = true;
-        firstStep = false;
-
-        RightArmUp();
-        LeftArmDown();
-    }
-
-    private void RightMouseClimbFirst()
-    {
-        dudeTorso.transform.position =
-                            new Vector2(dudeTorso.transform.position.x, dudeTorso.transform.position.y + torsoRiseValue);
-
-        dudeArmR.transform.position =
-           new Vector2(dudeArmR.transform.position.x, dudeArmR.transform.position.y);
-
-        dudeArmL.transform.position =
-            new Vector2(dudeArmL.transform.position.x, dudeArmL.transform.position.y);
-
-
-        //leftArmUp = true;
-        //leftMouseHeld = false;
-        //rightMouseHeld = true;
-        firstStep = false;
-
-        LeftArmUp();
-        RightArmDown();
-    }
-
-    private void LeftArmUp()
-    {
-        dudeArmL.transform.position =
-                        new Vector2(dudeArmL.transform.position.x, dudeArmL.transform.position.y + armsRiseValue);
-        leftArmUp = true;
-    }
-
-    private void LeftArmDown()
-    {
-        dudeArmL.transform.position =
-                        new Vector2(dudeArmL.transform.position.x, dudeArmL.transform.position.y - armsRiseValue);
-        leftArmUp = false;
-    }
-
-    private void RightArmUp()
-    {
-        dudeArmR.transform.position =
-                       new Vector2(dudeArmR.transform.position.x, dudeArmR.transform.position.y + armsRiseValue);
-        rightArmUp = true;
-    }
-
-    private void RightArmDown()
-    {
-        dudeArmR.transform.position =
-                       new Vector2(dudeArmR.transform.position.x, dudeArmR.transform.position.y - armsRiseValue);
-        rightArmUp = false;
     }
 }
