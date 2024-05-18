@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Wind : MonoBehaviour
@@ -12,9 +13,24 @@ public class Wind : MonoBehaviour
 
     private bool canApplyForce;
 
+    private float particleWindForce;
+
+    private bool switchDirection;
+
     private void Start()
     {
         //windZone.windMain = windForce;
+        switchDirection = true;
+        particleWindForce = windZone.windMain;
+    }
+
+    private void Update()
+    {
+        if (switchDirection)
+        {
+            switchDirection = false;
+            StartCoroutine(WindRando());
+        }
     }
 
     private void FixedUpdate()
@@ -23,6 +39,16 @@ public class Wind : MonoBehaviour
         {
             playerRB.AddForce(windDirection.normalized * windForce);
         }
+    }
+
+    IEnumerator WindRando()
+    {
+        int randoTime = Random.Range(4, 6);
+        yield return new WaitForSeconds(randoTime);
+        windDirection = new Vector3(-windDirection.x, 0, 0);
+        particleWindForce = -particleWindForce;
+        windZone.windMain = particleWindForce;
+        switchDirection = true;
     }
 
     public void NoWind()
