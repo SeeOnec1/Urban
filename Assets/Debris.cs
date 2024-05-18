@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Debris : MonoBehaviour
@@ -7,9 +8,13 @@ public class Debris : MonoBehaviour
     [SerializeField] private float destroyDelay;
     private Rigidbody2D rb;
 
+    private DudeMovement dudeMovement;
+    private bool debrisHit;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        debrisHit = false;
     }
 
     private void OnEnable()
@@ -33,6 +38,18 @@ public class Debris : MonoBehaviour
         {
             rb.velocity = Vector2.zero;
             gameObject.SetActive(false);
+        }
+
+
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player") && !debrisHit)
+        {
+            debrisHit = true;
+            dudeMovement = collision.gameObject.GetComponent<DudeMovement>();
+            dudeMovement.DebrisHit();
         }
     }
 

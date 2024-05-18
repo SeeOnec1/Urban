@@ -42,7 +42,7 @@ public class DebrisSpawner : MonoBehaviour
     private IEnumerator SpawnDebris()
     {
         canSpawn = false;
-        delayBetweenDebris = Random.Range(5, 7);
+        delayBetweenDebris = Random.Range(3, 6);
 
         yield return new WaitForSeconds(delayBetweenDebris);
 

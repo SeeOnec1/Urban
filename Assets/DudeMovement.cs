@@ -24,6 +24,8 @@ public class DudeMovement : MonoBehaviour
     private bool isJumping;
     private int sway;
 
+    private bool debrisHit;
+
     private void Start()
     {
         lr.enabled = true;
@@ -49,7 +51,7 @@ public class DudeMovement : MonoBehaviour
         //joint.anchor = new Vector2(topHinge.transform.position.x, topHinge.transform.position.y - transform.position.y);
         joint.connectedAnchor = topHinge.transform.position;
 
-        if (Input.GetKey(KeyCode.Mouse0) && sway == 0)
+        if (Input.GetKey(KeyCode.Mouse0))
         {
             if (canPress)
             {
@@ -63,17 +65,20 @@ public class DudeMovement : MonoBehaviour
             mouseOneHeld = true;
         }
 
-        if (Input.GetKeyUp(KeyCode.Mouse0) && sway == 0)
+        if (Input.GetKeyUp(KeyCode.Mouse0))
         {
-            joint.enabled = false;
-            rb.gravityScale = 0;
-            rb.velocity = Vector2.zero;
-            wind.NoWind(); ;
+            if (canPress)
+            {
+                joint.enabled = false;
+                rb.gravityScale = 0;
+                rb.velocity = Vector2.zero;
+                wind.NoWind();
+            }
 
             mouseOneHeld = false;
         }
 
-        if (Input.GetKey(KeyCode.Mouse1) && sway == 0)
+        if (Input.GetKey(KeyCode.Mouse1))
         {
             if (canPress)
             {
@@ -86,18 +91,50 @@ public class DudeMovement : MonoBehaviour
             mouseTwoHeld = true;
         }
 
-        if (Input.GetKeyUp(KeyCode.Mouse1) && sway == 0)
+        if (Input.GetKeyUp(KeyCode.Mouse1))
         {
-            joint.enabled = false;
-            rb.gravityScale = 0;
-            rb.velocity = Vector2.zero;
-            wind.NoWind(); ;
+            if (canPress)
+            {
+                joint.enabled = false;
+                rb.gravityScale = 0;
+                rb.velocity = Vector2.zero;
+                wind.NoWind();
+            }
 
             mouseTwoHeld = false;
         }
 
+
+        if (mouseOneHeld && mouseTwoHeld && canPress)
+        {
+            Debug.Log("complicated");
+            //isJumping = true;
+            joint.enabled = true;
+            canPress = false;
+            wind.ApplyWind();
+        }
+        else if (!mouseOneHeld || !mouseTwoHeld)
+        {
+            //isJumping = false;
+            //Debug.Log("SwayToZero");
+            if (!canPress && !debrisHit)
+            {
+                joint.enabled = false;
+                rb.gravityScale = 0;
+                rb.velocity = Vector2.zero;
+                wind.NoWind();
+                canPress = true;
+            }
+
+        }
+
+
+
+        /*
         if (mouseOneHeld && mouseTwoHeld && !isJumping)
         {
+            isJumping = true;
+
             StartCoroutine(Jump());
         }
 
@@ -105,19 +142,19 @@ public class DudeMovement : MonoBehaviour
         {
             if (sway == 1)
             {
-                isJumping = true;
                 joint.enabled = true;
                 canPress = false;
                 wind.ApplyWind();
             }
-            else if (sway == 2)
+
+            if (sway == 2)
             {
+                //Debug.Log(sway);
                 SwayToZero();
             }
         }
+        */
 
-
-        Debug.Log(sway);
         if (Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene(0);
@@ -135,12 +172,33 @@ public class DudeMovement : MonoBehaviour
     private void SwayToZero()
     {
         isJumping = false;
-        Debug.Log("leftControl");
+        //Debug.Log("SwayToZero");
         joint.enabled = false;
         rb.gravityScale = 0;
         rb.velocity = Vector2.zero;
         wind.NoWind();
         canPress = true;
         sway = 0;
+    }
+
+    public void DebrisHit()
+    {
+        debrisHit = true;
+        canPress = false;
+        StartCoroutine(DebrisHitDamage());
+    }
+
+    IEnumerator DebrisHitDamage()
+    {
+        joint.enabled = false;
+        rb.gravityScale = 1;
+        wind.NoWind();
+
+        yield return new WaitForSeconds(1f);
+
+        joint.enabled = true;
+        rb.gravityScale = 0;
+        debrisHit = false;
+        canPress = true;
     }
 }
