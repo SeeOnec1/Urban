@@ -13,6 +13,8 @@ public class StartGame : MonoBehaviour
 
     [SerializeField] private CanvasGroup UI;
 
+    [SerializeField] private AudioSource music;
+
     private void Awake()
     {
         gameStarted = false;
@@ -22,6 +24,8 @@ public class StartGame : MonoBehaviour
 
         UI.interactable = false;
         UI.alpha = 0f;
+
+        music.Stop();
 
     }
 
@@ -40,6 +44,8 @@ public class StartGame : MonoBehaviour
                 UI.interactable = true;
 
                 timer.TimerOn();
+                music.Play();
+
             }
         }
     }

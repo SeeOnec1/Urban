@@ -12,6 +12,8 @@ public class MainCamera : MonoBehaviour
 
     [SerializeField] private float particleStartPos;
 
+    [SerializeField] private AudioSource fireAmb;
+
     private void Update()
     {
         if (player.transform.position.y < 9.21f) //1
@@ -93,11 +95,15 @@ public class MainCamera : MonoBehaviour
         {
             cmVcam.transform.position = new Vector3(0f, 15 * camStartPos, -10f);
             ps.transform.position = new Vector2(0, particleStartPos + 300);
+
+            fireAmb.Stop();
         }
         else if (player.transform.position.y > 309.5f && player.transform.position.y < 329.61f) //17
         {
             cmVcam.transform.position = new Vector3(0f, 16 * camStartPos, -10f);
             ps.transform.position = new Vector2(0, particleStartPos + 320);
+
+            fireAmb.Play();
         }
         else if (player.transform.position.y > 329.61f && player.transform.position.y < 349.6f) //18
         {

@@ -33,6 +33,11 @@ public class DudeMovement : MonoBehaviour
 
     private bool isPressingMouse;
 
+    [SerializeField] private AudioSource climbSFX;
+    [SerializeField] private AudioSource hitSFX;
+    [SerializeField] private AudioSource jumpSFX;
+    private bool sendJumpSFX;
+
     [Header("Camera Shake")]
     [SerializeField] private float shakeIntensity = 3f;
     [SerializeField] private float shakeTime = 0.23f;
@@ -174,6 +179,7 @@ public class DudeMovement : MonoBehaviour
                 rb.velocity = Vector2.zero;
                 wind.NoWind();
                 canPress = true;
+                sendJumpSFX = false;
                 //playerAnim.SetBool("isJumping", false);
             }
 
@@ -207,9 +213,15 @@ public class DudeMovement : MonoBehaviour
 
         if (isPressingMouse && canPress && Mathf.Abs(rb.velocity.y) > 0.1f)
         {
+
             playerAnim.SetBool("isMoving", true);
+            climbSFX.volume = 0.6f;
         }
-        else playerAnim.SetBool("isMoving", false);
+        else
+        {
+            playerAnim.SetBool("isMoving", false);
+            climbSFX.volume = 0f;
+        }
 
         if (isJumping)
         {
@@ -225,6 +237,13 @@ public class DudeMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene(0);
+        }
+
+
+        if (!sendJumpSFX && isJumping)
+        {
+            sendJumpSFX = true;
+            jumpSFX.Play();
         }
     }
 
@@ -250,6 +269,7 @@ public class DudeMovement : MonoBehaviour
 
     public void DebrisHit()
     {
+        hitSFX.Play();
         StartCoroutine(DebrisHitDamage());
     }
 

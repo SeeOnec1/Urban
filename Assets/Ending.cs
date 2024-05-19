@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Ending : MonoBehaviour
 {
@@ -19,16 +20,26 @@ public class Ending : MonoBehaviour
     [SerializeField] private GameObject dText;
     [SerializeField] private GameObject eText;
 
+    [SerializeField] private Animator anim;
 
     private void Start()
     {
+        Time.timeScale = 1f;
         gameFinished = false;
+        eText.SetActive(false);
+        dText.SetActive(false);
+        cText.SetActive(false);
+        bText.SetActive(false);
+        aText.SetActive(false);
+        sText.SetActive(false);
+        splusText.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
+
             gameFinished = true;
         }
     }
@@ -37,9 +48,13 @@ public class Ending : MonoBehaviour
     {
         if (gameFinished)
         {
+            Time.timeScale = 0f;
             gameFinished = false;
             timerScript.PauseTimer();
             peopleAlive = timerScript.HowManyAlive();
+            CheckScore();
+            anim.SetTrigger("end");
+            Debug.Log("AHH");
         }
     }
 
@@ -106,7 +121,7 @@ public class Ending : MonoBehaviour
             sText.SetActive(true);
             splusText.SetActive(false);
         }
-        else if (peopleAlive == 5)
+        else if (peopleAlive == 6)
         {
             eText.SetActive(false);
             dText.SetActive(false);
@@ -118,6 +133,11 @@ public class Ending : MonoBehaviour
         }
 
 
+    }
+
+    public void TryAgain()
+    {
+        SceneManager.LoadScene(0);
     }
 
 }
