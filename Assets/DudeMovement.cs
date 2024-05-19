@@ -27,6 +27,12 @@ public class DudeMovement : MonoBehaviour
 
     [SerializeField] private BoxCollider2D boxCollider;
 
+    [SerializeField] private Animator playerAnim;
+    [SerializeField] private Animator shadowAnim;
+
+
+    private bool isPressingMouse;
+
     [Header("Camera Shake")]
     [SerializeField] private float shakeIntensity = 3f;
     [SerializeField] private float shakeTime = 0.23f;
@@ -75,7 +81,13 @@ public class DudeMovement : MonoBehaviour
             mouseOneHeld = false;
             mouseTwoHeld = false;
             wind.NoWind();
+            isJumping = false;
             // boxCollider.enabled = false;
+            playerAnim.SetBool("isFalling", true);
+        }
+        else
+        {
+            playerAnim.SetBool("isFalling", false);
         }
 
         if (Input.GetKey(KeyCode.Mouse0))
@@ -86,6 +98,8 @@ public class DudeMovement : MonoBehaviour
                 rb.gravityScale = 0f;
                 rb.velocity = new Vector2(rb.velocity.x, moveSpeed);
                 wind.NoWind();
+
+                isPressingMouse = true;
             }
 
 
@@ -100,6 +114,9 @@ public class DudeMovement : MonoBehaviour
                 rb.gravityScale = 0;
                 rb.velocity = Vector2.zero;
                 wind.NoWind();
+
+
+                isPressingMouse = false;
             }
 
             mouseOneHeld = false;
@@ -113,6 +130,8 @@ public class DudeMovement : MonoBehaviour
                 rb.gravityScale = 0f;
                 rb.velocity = new Vector2(rb.velocity.x, -moveSpeed);
                 wind.NoWind();
+
+                isPressingMouse = true;
             }
 
             mouseTwoHeld = true;
@@ -126,6 +145,8 @@ public class DudeMovement : MonoBehaviour
                 rb.gravityScale = 0;
                 rb.velocity = Vector2.zero;
                 wind.NoWind();
+
+                isPressingMouse = false;
             }
 
             mouseTwoHeld = false;
@@ -135,25 +156,29 @@ public class DudeMovement : MonoBehaviour
         if (mouseOneHeld && mouseTwoHeld && canPress)
         {
             //Debug.Log("complicated");
-            //isJumping = true;
+            isJumping = true;
             joint.enabled = true;
             canPress = false;
             wind.ApplyWind();
+            //
         }
         else if (!mouseOneHeld || !mouseTwoHeld)
         {
-            //isJumping = false;
+
             //Debug.Log("SwayToZero");
             if (!canPress && !debrisHit)
             {
+                isJumping = false;
                 joint.enabled = false;
                 rb.gravityScale = 0;
                 rb.velocity = Vector2.zero;
                 wind.NoWind();
                 canPress = true;
+                //playerAnim.SetBool("isJumping", false);
             }
 
         }
+        //Debug.Log(isJumping);
 
         /*
         if (mouseOneHeld && mouseTwoHeld && !isJumping)
@@ -179,6 +204,23 @@ public class DudeMovement : MonoBehaviour
             }
         }
         */
+
+        if (isPressingMouse && canPress && Mathf.Abs(rb.velocity.y) > 0.1f)
+        {
+            playerAnim.SetBool("isMoving", true);
+        }
+        else playerAnim.SetBool("isMoving", false);
+
+        if (isJumping)
+        {
+            playerAnim.SetBool("isJumping", true);
+            shadowAnim.SetBool("showShadow", true);
+        }
+        else if (!isJumping)
+        {
+            playerAnim.SetBool("isJumping", false);
+            shadowAnim.SetBool("showShadow", false);
+        }
 
         if (Input.GetKeyDown(KeyCode.R))
         {

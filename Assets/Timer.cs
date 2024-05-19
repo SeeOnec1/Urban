@@ -12,10 +12,13 @@ public class Timer : MonoBehaviour
 
     [SerializeField] private float startTime;
 
+    [SerializeField] private TextMeshProUGUI peopleAlive;
+    private int numberOfPeopleAlive;
+
     private void Start()
     {
         timerText = GameObject.FindGameObjectWithTag("Timer").GetComponent<TextMeshProUGUI>();
-        timerOn = true;
+        timerOn = false;
         //timeRemaining = PlayerPrefs.GetFloat("timeYet");
         timeToShow = startTime;
         timeRemaining = 0;
@@ -46,6 +49,16 @@ public class Timer : MonoBehaviour
             timerOn = false;
         }
 
+        if (timeToShow >= 150) numberOfPeopleAlive = 6;
+        else if (timeToShow >= 120 && timeToShow < 150) numberOfPeopleAlive = 5;
+        else if (timeToShow >= 90 && timeToShow < 120) numberOfPeopleAlive = 4;
+        else if (timeToShow >= 60 && timeToShow < 90) numberOfPeopleAlive = 3;
+        else if (timeToShow >= 30 && timeToShow < 60) numberOfPeopleAlive = 2;
+        else if (timeToShow >= 0 && timeToShow < 30) numberOfPeopleAlive = 1;
+        else if (timeToShow < 0) { numberOfPeopleAlive = 0; PauseTimer(); }
+
+        peopleAlive.text = numberOfPeopleAlive.ToString();
+
     }
 
     public void PauseTimer()
@@ -62,5 +75,10 @@ public class Timer : MonoBehaviour
     public void TimerOn()
     {
         timerOn = true;
+    }
+
+    public int HowManyAlive()
+    {
+        return numberOfPeopleAlive;
     }
 }
