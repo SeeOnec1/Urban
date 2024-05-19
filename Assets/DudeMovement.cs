@@ -1,9 +1,8 @@
+using Cinemachine;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.XR;
+
 
 public class DudeMovement : MonoBehaviour
 {
@@ -26,6 +25,16 @@ public class DudeMovement : MonoBehaviour
 
     private bool debrisHit;
 
+    [SerializeField] private BoxCollider2D boxCollider;
+
+    [Header("Camera Shake")]
+    [SerializeField] private float shakeIntensity = 3f;
+    [SerializeField] private float shakeTime = 0.23f;
+    private GameObject cinemachineCamera;
+    private CinemachineVirtualCamera vCam;
+    CinemachineBasicMultiChannelPerlin cbmcp;
+
+
     private void Start()
     {
         lr.enabled = true;
@@ -41,6 +50,15 @@ public class DudeMovement : MonoBehaviour
         canPress = true;
         isJumping = false;
         sway = 0;
+
+        boxCollider.enabled = true;
+
+        #region CameraShake
+        cinemachineCamera = GameObject.FindGameObjectWithTag("Cinemachine");
+        vCam = cinemachineCamera.GetComponent<CinemachineVirtualCamera>();
+        cbmcp = vCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        cbmcp.m_AmplitudeGain = 0;
+        #endregion
     }
 
     private void Update()
@@ -50,6 +68,15 @@ public class DudeMovement : MonoBehaviour
 
         //joint.anchor = new Vector2(topHinge.transform.position.x, topHinge.transform.position.y - transform.position.y);
         joint.connectedAnchor = topHinge.transform.position;
+
+        if (debrisHit)
+        {
+            rb.gravityScale = 1;
+            mouseOneHeld = false;
+            mouseTwoHeld = false;
+            wind.NoWind();
+            // boxCollider.enabled = false;
+        }
 
         if (Input.GetKey(KeyCode.Mouse0))
         {
@@ -107,7 +134,7 @@ public class DudeMovement : MonoBehaviour
 
         if (mouseOneHeld && mouseTwoHeld && canPress)
         {
-            Debug.Log("complicated");
+            //Debug.Log("complicated");
             //isJumping = true;
             joint.enabled = true;
             canPress = false;
@@ -127,8 +154,6 @@ public class DudeMovement : MonoBehaviour
             }
 
         }
-
-
 
         /*
         if (mouseOneHeld && mouseTwoHeld && !isJumping)
@@ -183,16 +208,20 @@ public class DudeMovement : MonoBehaviour
 
     public void DebrisHit()
     {
-        debrisHit = true;
-        canPress = false;
         StartCoroutine(DebrisHitDamage());
     }
 
     IEnumerator DebrisHitDamage()
     {
+        debrisHit = true;
+        canPress = false;
         joint.enabled = false;
+        rb.velocity = Vector2.zero;
         rb.gravityScale = 1;
+        mouseOneHeld = false;
+        mouseTwoHeld = false;
         wind.NoWind();
+        //boxCollider.enabled = false;
 
         yield return new WaitForSeconds(1f);
 
@@ -200,5 +229,24 @@ public class DudeMovement : MonoBehaviour
         rb.gravityScale = 0;
         debrisHit = false;
         canPress = true;
+        // boxCollider.enabled = true;
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Walls"))
+        {
+            StartCoroutine(CameraShake());
+        }
+    }
+
+    #region CamShake
+    IEnumerator CameraShake()
+    {
+        cbmcp.m_AmplitudeGain = shakeIntensity;
+        yield return new WaitForSeconds(shakeTime);
+
+        cbmcp.m_AmplitudeGain = 0;
+    }
+    #endregion
 }

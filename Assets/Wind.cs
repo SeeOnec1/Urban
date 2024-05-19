@@ -43,7 +43,7 @@ public class Wind : MonoBehaviour
 
     IEnumerator WindRando()
     {
-        int randoTime = Random.Range(4, 6);
+        float randoTime = 3;
         yield return new WaitForSeconds(randoTime);
         windDirection = new Vector3(-windDirection.x, 0, 0);
         particleWindForce = -particleWindForce;

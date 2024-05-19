@@ -6,6 +6,9 @@ TagManager:
   tags:
   - DebrisDestroy
   - Debris
+  - Walls
+  - Cinemachine
+  - Timer
   layers:
   - Default
   - TransparentFX

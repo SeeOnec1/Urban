@@ -30,8 +30,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 0.27019998, y: 0.28, z: 0.28}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 593e5abef239bda4d951d2de243beb23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyDelay: 3
+  destroyDelay: 2.5
 --- !u!61 &3522106803333609954
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -109,7 +109,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 995581970630917589}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: cffcaf0af0aab6a409afee5df440b057, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 64
@@ -143,7 +143,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 19.2, y: 10.8}
+  m_Size: {x: 12.120351, y: 10.8}
   m_EdgeRadius: 0
 --- !u!50 &6061189164411227036
 Rigidbody2D:

@@ -5,89 +5,114 @@ using UnityEngine;
 public class MainCamera : MonoBehaviour
 {
     [SerializeField] private GameObject player;
+    [SerializeField] private GameObject cmVcam;
     [SerializeField] private GameObject ps;
+
+    [SerializeField] private float camStartPos;
+
+    [SerializeField] private float particleStartPos;
 
     private void Update()
     {
-        if (player.transform.position.y < 7.5f) //1
+        if (player.transform.position.y < 9.21f) //1
         {
-            gameObject.transform.position = new Vector3(0f, 0f, -10f);
-            ps.transform.position = new Vector2(0, 10f);
+            cmVcam.transform.position = new Vector3(0f, 0f, -10f);
+            ps.transform.position = new Vector2(0, particleStartPos);
         }
-        else if (player.transform.position.y > 7.5f && player.transform.position.y < 23.68f) //2
+        else if (player.transform.position.y > 9.21f && player.transform.position.y < 29.26f) //2
         {
-            gameObject.transform.position = new Vector3(0f, 16.2f, -10f);
-            ps.transform.position = new Vector2(0, 27.2f);
+            cmVcam.transform.position = new Vector3(0f, 20f, -10f);
+            ps.transform.position = new Vector2(0, particleStartPos + 20);
         }
-        else if (player.transform.position.y > 23.68f && player.transform.position.y < 39.84f) //3
+        else if (player.transform.position.y > 29.26f && player.transform.position.y < 49.27f) //3
         {
-            gameObject.transform.position = new Vector3(0f, 2 * 16.2f, -10f);
-            ps.transform.position = new Vector2(0, 43.1f);
+            cmVcam.transform.position = new Vector3(0f, 2 * camStartPos, -10f);
+            ps.transform.position = new Vector2(0, particleStartPos + 40);
         }
-        else if (player.transform.position.y > 39.84f && player.transform.position.y < 56f) //4
+        else if (player.transform.position.y > 49.27f && player.transform.position.y < 69.4f) //4
         {
-            gameObject.transform.position = new Vector3(0f, 3 * 16.2f, -10f);
-            ps.transform.position = new Vector2(0, 58.7f);
+            cmVcam.transform.position = new Vector3(0f, 3 * camStartPos, -10f);
+            ps.transform.position = new Vector2(0, particleStartPos + 60);
         }
-        else if (player.transform.position.y > 56f && player.transform.position.y < 72f) //5
+        else if (player.transform.position.y > 69.4f && player.transform.position.y < 89.3f) //5
         {
-            gameObject.transform.position = new Vector3(0f, 4 * 16.2f, -10f);
-            ps.transform.position = new Vector2(0, 74.6f);
+            cmVcam.transform.position = new Vector3(0f, 4 * camStartPos, -10f);
+            ps.transform.position = new Vector2(0, particleStartPos + 80);
         }
-        else if (player.transform.position.y > 72f && player.transform.position.y < 88.4f) //6
+        else if (player.transform.position.y > 89.3f && player.transform.position.y < 109.4f) //6
         {
-            gameObject.transform.position = new Vector3(0f, 5 * 16.2f, -10f);
-            ps.transform.position = new Vector2(0, 90.8f);
+            cmVcam.transform.position = new Vector3(0f, 5 * camStartPos, -10f);
+            ps.transform.position = new Vector2(0, particleStartPos + 100);
         }
-        else if (player.transform.position.y > 88.4f && player.transform.position.y < 104.6f) //7
+        else if (player.transform.position.y > 109.4f && player.transform.position.y < 129.3f) //7
         {
-            gameObject.transform.position = new Vector3(0f, 6 * 16.2f, -10f);
-            ps.transform.position = new Vector2(0, 106.7f);
+            cmVcam.transform.position = new Vector3(0f, 6 * camStartPos, -10f);
+            ps.transform.position = new Vector2(0, particleStartPos + 120);
         }
-        else if (player.transform.position.y > 104.6f && player.transform.position.y < 120.8f) //8
+        else if (player.transform.position.y > 129.3f && player.transform.position.y < 149.5f) //8
         {
-            gameObject.transform.position = new Vector3(0f, 7 * 16.2f, -10f);
-            ps.transform.position = new Vector2(0, 123.15f);
+            cmVcam.transform.position = new Vector3(0f, 7 * camStartPos, -10f);
+            ps.transform.position = new Vector2(0, particleStartPos + 140);
         }
-        else if (player.transform.position.y > 120.8f && player.transform.position.y < 137f) //9
+        else if (player.transform.position.y > 149.5f && player.transform.position.y < 169.5f) //9
         {
-            gameObject.transform.position = new Vector3(0f, 8 * 16.2f, -10f);
-            ps.transform.position = new Vector2(0, 139.38f);
+            cmVcam.transform.position = new Vector3(0f, 8 * camStartPos, -10f);
+            ps.transform.position = new Vector2(0, particleStartPos + 160);
         }
-        else if (player.transform.position.y > 137f && player.transform.position.y < 153.3f) //10
+        else if (player.transform.position.y > 169.5f && player.transform.position.y < 189.44f) //10
         {
-            gameObject.transform.position = new Vector3(0f, 9 * 16.2f, -10f);
-            ps.transform.position = new Vector2(0, 155.7f);
+            cmVcam.transform.position = new Vector3(0f, 9 * camStartPos, -10f);
+            ps.transform.position = new Vector2(0, particleStartPos + 180);
         }//
-        else if (player.transform.position.y > 153.3f && player.transform.position.y < 161.9f) //11
+        else if (player.transform.position.y > 189.44f && player.transform.position.y < 209.5f) //11
         {
-            gameObject.transform.position = new Vector3(0f, 10 * 16.2f, -10f);
-            ps.transform.position = new Vector2(0, 171.5f);
+            cmVcam.transform.position = new Vector3(0f, 10 * camStartPos, -10f);
+            ps.transform.position = new Vector2(0, particleStartPos + 200);
         }
-        else if (player.transform.position.y > 161.9f && player.transform.position.y < 185.56f) //12
+        else if (player.transform.position.y > 209.5f && player.transform.position.y < 229.5f) //12
         {
-            gameObject.transform.position = new Vector3(0f, 11 * 16.2f, -10f);
-            ps.transform.position = new Vector2(0, 187.9f);
+            cmVcam.transform.position = new Vector3(0f, 11 * camStartPos, -10f);
+            ps.transform.position = new Vector2(0, particleStartPos + 220);
         }
-        else if (player.transform.position.y > 185.56f && player.transform.position.y < 201.8f) //13
+        else if (player.transform.position.y > 229.5f && player.transform.position.y < 249.5f) //13
         {
-            gameObject.transform.position = new Vector3(0f, 12 * 16.2f, -10f);
-            ps.transform.position = new Vector2(0, 203.9f);
+            cmVcam.transform.position = new Vector3(0f, 12 * camStartPos, -10f);
+            ps.transform.position = new Vector2(0, particleStartPos + 240);
         }
-        else if (player.transform.position.y > 201.8f && player.transform.position.y < 218f) //14
+        else if (player.transform.position.y > 249.5f && player.transform.position.y < 269.5f) //14
         {
-            gameObject.transform.position = new Vector3(0f, 13 * 16.2f, -10f);
-            ps.transform.position = new Vector2(0, 219.5f);
+            cmVcam.transform.position = new Vector3(0f, 13 * camStartPos, -10f);
+            ps.transform.position = new Vector2(0, particleStartPos + 260);
         }
-        else if (player.transform.position.y > 218f && player.transform.position.y < 234.1f) //15
+        else if (player.transform.position.y > 269.5f && player.transform.position.y < 289.6f) //15
         {
-            gameObject.transform.position = new Vector3(0f, 14 * 16.2f, -10f);
-            ps.transform.position = new Vector2(0, 236.3f);
+            cmVcam.transform.position = new Vector3(0f, 14 * camStartPos, -10f);
+            ps.transform.position = new Vector2(0, particleStartPos + 280);
         }
-        else if (player.transform.position.y > 234.1f && player.transform.position.y < 250.6f) //16
+        else if (player.transform.position.y > 289.6f && player.transform.position.y < 309.5f) //16
         {
-            gameObject.transform.position = new Vector3(0f, 15 * 16.2f, -10f);
-            ps.transform.position = new Vector2(0, 252.8f);
+            cmVcam.transform.position = new Vector3(0f, 15 * camStartPos, -10f);
+            ps.transform.position = new Vector2(0, particleStartPos + 300);
+        }
+        else if (player.transform.position.y > 309.5f && player.transform.position.y < 329.61f) //17
+        {
+            cmVcam.transform.position = new Vector3(0f, 16 * camStartPos, -10f);
+            ps.transform.position = new Vector2(0, particleStartPos + 320);
+        }
+        else if (player.transform.position.y > 329.61f && player.transform.position.y < 349.6f) //18
+        {
+            cmVcam.transform.position = new Vector3(0f, 17 * camStartPos, -10f);
+            ps.transform.position = new Vector2(0, particleStartPos + 340);
+        }
+        else if (player.transform.position.y > 349.6f && player.transform.position.y < 369.7f) //19
+        {
+            cmVcam.transform.position = new Vector3(0f, 18 * camStartPos, -10f);
+            ps.transform.position = new Vector2(0, particleStartPos + 360);
+        }
+        else if (player.transform.position.y > 369.7f && player.transform.position.y < 389.6f) //20
+        {
+            cmVcam.transform.position = new Vector3(0f, 19 * camStartPos, -10f);
+            ps.transform.position = new Vector2(0, 380.94f);
         }
     }
 }

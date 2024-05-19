@@ -29,6 +29,7 @@ public class Debris : MonoBehaviour
             else if (rotationDirection == 1) { rb.AddTorque(-rotationValue * 100); }
 
             StartCoroutine(DestroyDelay());
+            debrisHit = false;
         }
     }
 
