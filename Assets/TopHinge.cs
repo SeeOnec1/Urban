@@ -8,6 +8,6 @@ public class TopHinge : MonoBehaviour
 
     private void Update()
     {
-        transform.position = new Vector2(0, player.transform.position.y + 20f);
+        transform.position = new Vector2(0, player.transform.position.y + 23f);
     }
 }

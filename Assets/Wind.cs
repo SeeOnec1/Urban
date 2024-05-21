@@ -9,13 +9,16 @@ public class Wind : MonoBehaviour
 
     [SerializeField] private WindZone windZone;
     [SerializeField] private Vector3 windDirection;
-    [SerializeField] private float windForce;
+    [SerializeField] private float windForceNumber;
+    private float windForce;
 
     private bool canApplyForce;
 
     private float particleWindForce;
 
     private bool switchDirection;
+
+    private float middleOfScreen;
 
     private void Start()
     {
@@ -26,11 +29,34 @@ public class Wind : MonoBehaviour
 
     private void Update()
     {
+        Vector3 mousePos = Input.mousePosition;
+        //Debug.Log(Screen.width);
+
+        middleOfScreen = Screen.width / 2;
+
+        if (mousePos.x > middleOfScreen)
+        {
+            //windDirection = new Vector3(windDirection.x, 0, 0);
+            windForce = -windForceNumber;
+            windZone.windMain = particleWindForce;
+        }
+        else if (mousePos.x <= middleOfScreen)
+        {
+            //windDirection = new Vector3(-windDirection.x, 0, 0);
+            windForce = windForceNumber;
+            windZone.windMain = -particleWindForce;
+        }
+
+
+
+
+        /*
         if (switchDirection)
         {
             switchDirection = false;
             StartCoroutine(WindRando());
         }
+        */
     }
 
     private void FixedUpdate()

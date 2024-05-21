@@ -54,7 +54,7 @@ public class Ending : MonoBehaviour
             peopleAlive = timerScript.HowManyAlive();
             CheckScore();
             anim.SetTrigger("end");
-            Debug.Log("AHH");
+            // Debug.Log("AHH");
         }
     }
 

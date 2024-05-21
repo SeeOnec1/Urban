@@ -33,7 +33,7 @@ public class StartGame : MonoBehaviour
     {
         if (!gameStarted)
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (Input.GetKey(KeyCode.Mouse0))
             {
                 gameStarted = true;
                 panelAnim.SetTrigger("turnPanelOff");

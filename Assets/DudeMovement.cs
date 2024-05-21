@@ -45,6 +45,8 @@ public class DudeMovement : MonoBehaviour
     private CinemachineVirtualCamera vCam;
     CinemachineBasicMultiChannelPerlin cbmcp;
 
+    private bool leftMouseButtonSimulated, rightMouseSimulated, bothButtonSimulated;
+    private bool canEnd;
 
     private void Start()
     {
@@ -64,6 +66,10 @@ public class DudeMovement : MonoBehaviour
 
         boxCollider.enabled = true;
 
+        leftMouseButtonSimulated = false;
+        rightMouseSimulated = false;
+        canEnd = false;
+
         #region CameraShake
         cinemachineCamera = GameObject.FindGameObjectWithTag("Cinemachine");
         vCam = cinemachineCamera.GetComponent<CinemachineVirtualCamera>();
@@ -74,6 +80,53 @@ public class DudeMovement : MonoBehaviour
 
     private void Update()
     {
+
+        /*
+        if (Input.touchCount == 1)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                if (touch.position.x <= 1080)
+                {
+                    canEnd = true;
+                    leftMouseButtonSimulated = false;
+                    rightMouseSimulated = true;
+
+                }
+
+                if (touch.position.x > 1080)
+                {
+                    canEnd = true;
+                    rightMouseSimulated = false;
+                    leftMouseButtonSimulated = true;
+                }
+
+
+            }
+            else if (touch.phase == TouchPhase.Ended && canEnd)
+            {
+                canEnd = false;
+                leftMouseButtonSimulated = false;
+                rightMouseSimulated = false;
+            }
+
+
+        }
+
+        if (Input.touchCount == 2)
+        {
+            //Touch touch = Input.GetTouch(0);
+
+
+            bothButtonSimulated = true;
+        }
+        else bothButtonSimulated = false;
+        */
+
+
+
         lr.SetPosition(0, transform.position);
         lr.SetPosition(1, topHook.transform.position);
 
@@ -95,6 +148,100 @@ public class DudeMovement : MonoBehaviour
             playerAnim.SetBool("isFalling", false);
         }
 
+        #region Phone Controls
+        /*
+        if (rightMouseSimulated) //leftside
+        {
+            if (canPress)
+            {
+
+                joint.enabled = false;
+                rb.gravityScale = 0f;
+                transform.position = new Vector2(transform.position.x, transform.position.y - 0.1f);
+                //rb.velocity = new Vector2(rb.velocity.x, -moveSpeed);
+                wind.NoWind();
+
+                //Debug.Log("shouldGoDown");
+                isPressingMouse = true;
+            }
+            mouseTwoHeld = true;
+        }
+
+        if (!rightMouseSimulated)
+        {
+            if (canPress)
+            {
+                joint.enabled = false;
+                rb.gravityScale = 0;
+                rb.velocity = Vector2.zero;
+                wind.NoWind();
+
+                isPressingMouse = false;
+            }
+            mouseTwoHeld = false;
+        }
+
+        if (leftMouseButtonSimulated)
+        {
+            if (canPress)
+            {
+                joint.enabled = false;
+                rb.gravityScale = 0f;
+                rb.velocity = new Vector2(rb.velocity.x, -moveSpeed);
+                wind.NoWind();
+
+                isPressingMouse = true;
+            }
+            mouseOneHeld = true;
+        }
+
+        if (!leftMouseButtonSimulated)
+        {
+            if (canPress)
+            {
+                joint.enabled = false;
+                rb.gravityScale = 0;
+                rb.velocity = Vector2.zero;
+                wind.NoWind();
+
+                isPressingMouse = false;
+            }
+
+            mouseOneHeld = false;
+        }
+
+
+        if (bothButtonSimulated && canPress)
+        {
+            //Debug.Log("complicated");
+            isJumping = true;
+            joint.enabled = true;
+            canPress = false;
+            wind.ApplyWind();
+            //
+        }
+        else if (!bothButtonSimulated)
+        {
+
+            //Debug.Log("SwayToZero");
+            if (!canPress && !debrisHit)
+            {
+                leftMouseButtonSimulated = false;
+                rightMouseSimulated = false;
+                isJumping = false;
+                joint.enabled = false;
+                rb.gravityScale = 0;
+                rb.velocity = Vector2.zero;
+                wind.NoWind();
+                canPress = true;
+                sendJumpSFX = false;
+                //playerAnim.SetBool("isJumping", false);
+            }
+
+        }*/
+        #endregion
+
+        #region PC controls
         if (Input.GetKey(KeyCode.Mouse0))
         {
             if (canPress)
@@ -186,30 +333,9 @@ public class DudeMovement : MonoBehaviour
         }
         //Debug.Log(isJumping);
 
-        /*
-        if (mouseOneHeld && mouseTwoHeld && !isJumping)
-        {
-            isJumping = true;
+        #endregion
 
-            StartCoroutine(Jump());
-        }
 
-        if (isJumping)
-        {
-            if (sway == 1)
-            {
-                joint.enabled = true;
-                canPress = false;
-                wind.ApplyWind();
-            }
-
-            if (sway == 2)
-            {
-                //Debug.Log(sway);
-                SwayToZero();
-            }
-        }
-        */
 
         if (isPressingMouse && canPress && Mathf.Abs(rb.velocity.y) > 0.1f)
         {
@@ -312,3 +438,4 @@ public class DudeMovement : MonoBehaviour
     }
     #endregion
 }
+
